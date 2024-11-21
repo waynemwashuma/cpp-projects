@@ -1,0 +1,11 @@
+CXX		=	g++
+CXXFLAGS	= -Wall -std=c++11
+
+all:		main debug
+
+main:
+		$(CXX) $(CXXFLAGS) -o main main.cpp PatientMangement.cpp
+debug:
+		$(CXX) $(CXXFLAGS) -o main-debug -g main.cpp PatientMangement.cpp
+clean:
+		rm -f main main-debug

@@ -1,0 +1,9 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "files.associations": {
+    "*.ejs": "html",
+    "iostream": "cpp",
+    "fstream": "cpp",
+    "*.tcc": "cpp"
+  }
+}
