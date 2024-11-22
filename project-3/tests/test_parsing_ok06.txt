@@ -1,0 +1,6 @@
+age, ten;
+
+hello {
+  age = ten;
+  ten = age;
+}

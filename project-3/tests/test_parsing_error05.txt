@@ -1,0 +1,8 @@
+age
+
+hello {
+  age = ten;
+  world {
+    agent;
+  }
+}

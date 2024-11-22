@@ -1,0 +1,17 @@
+a, b, c;
+
+hello {
+  public: a, b;
+  private: c, d;
+  world2 {
+    public: a, c;
+
+    a = b;
+    c = d;
+  }
+}
+
+// Comment after code
+// This should generate a syntax error:
+
+a = b;

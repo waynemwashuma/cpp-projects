@@ -1,0 +1,13 @@
+main.d = main.a
+main.b = main.c
+sub1.a = main.b
+::d = sub1.a
+?.e = main.c
+::x = main.g
+main.f = ?.w
+::y = main.a
+sub2.b = ::z
+sub2.y = main.a
+sub2.b = sub2.z
+::y = main.a
+main.b = ::z

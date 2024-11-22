@@ -1,0 +1,34 @@
+x, y, z;
+
+hello {
+  public: a, b;
+  private: c, d;
+
+  x = a;
+  c = y;
+  w1 {
+    private: a, b;
+   
+    a = x;
+    y = c;
+    b = d;
+  }
+  b = z;
+  y = d;
+  w2 {
+    public: a, b;
+
+    x = a;
+    c = y;
+    d = b;
+  }
+  d = b;
+  y = z;
+  w3 {
+    x = a;
+    y = c;
+    d = b;
+  }
+  x = y;
+  b = z;
+}

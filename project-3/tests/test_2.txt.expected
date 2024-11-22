@@ -1,0 +1,17 @@
+::x = hello.a
+hello.c = ::y
+w1.a = ::x
+::y = ?.c
+w1.b = ?.d
+hello.b = ::z
+::y = hello.d
+::x = w2.a
+?.c = ::y
+?.d = w2.b
+hello.d = hello.b
+::y = ::z
+::x = hello.a
+::y = ?.c
+?.d = hello.b
+::x = ::y
+hello.b = ::z

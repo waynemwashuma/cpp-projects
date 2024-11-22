@@ -1,0 +1,36 @@
+a, b, c, d, x, y, z;
+
+main {
+    public:
+        a, b, c;
+    private:
+        d, e, f, g;
+
+    d = a;
+    b = c;
+    sub1 {
+        public:
+            a, x, w;
+
+        a = b;
+        d = a;
+        e = c;
+    }
+    x = g;
+    f = w;
+    sub2 {
+        public:
+            b;
+        private:
+            y, z;
+
+        myScope {
+            y = a;
+            b = z;
+        }
+        y = a;
+        b = z;
+    }
+    y = a;
+    b = z;
+}
