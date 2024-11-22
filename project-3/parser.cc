@@ -37,6 +37,10 @@ void Parser::parse(std::vector<Token> tokens)
     case PUBLIC:
       current_visibility = VPUBLIC;
       break;
+    case EQUAL:
+      if (current_scope == GLOBAL_SCOPE_MARKER)
+        syntax_error();
+      break;
     default:
       break;
     }
