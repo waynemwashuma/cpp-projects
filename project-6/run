@@ -1,0 +1,29 @@
+#!/bin/bash
+total=0;
+count=0;
+
+for i in {01..20};do
+  arguments=$(cat tests/$i/Execution)
+  ./PJ3 $arguments < tests/$i/Instructions > tests/$i/test.output
+  diff tests/$i/Output.txt tests/$i/test.output > tests/$i/output.diff
+	echo done test no $i
+done
+
+for f in $(ls tests/{01..20}/*.diff); do
+	total=$((total+1));
+	echo "========================================================";
+	echo $(dirname $f);
+	echo "========================================================";
+	if [ -s $f ]; then
+		cat $f
+	else
+		count=$((count+1));
+		echo "NO ERRORS HERE!";
+	fi
+	echo "--------------------------------------------------------";
+done
+
+echo A total of $count out of $total tests passed.;
+
+rm tests/{01..20}/*.output
+rm tests/{01..20}/*.diff

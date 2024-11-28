@@ -1,0 +1,16 @@
+The shortest path from 1 to 2 is:
+[1:    0.00]-->[2:    9.93].
+The shortest path from 1 to 3 is:
+[1:    0.00]-->[3:    1.36].
+The shortest path from 1 to 4 is:
+[1:    0.00]-->[3:    1.36]-->[4:    1.76].
+The shortest path from 1 to 5 is:
+[1:    0.00]-->[3:    1.36]-->[4:    1.76]-->[5:    4.18].
+The shortest path from 1 to 6 is:
+[1:    0.00]-->[3:    1.36]-->[4:    1.76]-->[5:    4.18]-->[6:    9.10].
+The shortest path from 1 to 7 is:
+[1:    0.00]-->[3:    1.36]-->[4:    1.76]-->[5:    4.18]-->[6:    9.10]-->[7:   23.51].
+The shortest path from 1 to 8 is:
+[1:    0.00]-->[2:    9.93]-->[8:   12.69].
+The shortest path from 1 to 9 is:
+[1:    0.00]-->[2:    9.93]-->[8:   12.69]-->[9:   19.88].

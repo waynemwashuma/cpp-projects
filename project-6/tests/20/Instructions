@@ -1,0 +1,13 @@
+SingleSource    1
+PrintPath 1 2
+PrintPath 2 3
+PrintPath 3 4
+SingleSource    2
+PrintPath 1 3
+PrintPath 2 4
+PrintPath 3 5
+SingleSource    3
+PrintPath 1 4
+PrintPath 2 5
+PrintPath 3 6
+Stop

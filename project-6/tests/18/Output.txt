@@ -1,0 +1,5 @@
+The shortest path from 1 to 2 is:
+[1:    0.00]-->[4:    5.00]-->[2:    8.00].
+There is no path from 1 to 8.
+The shortest path from 2 to 5 is:
+[2:    0.00]-->[4:    2.00]-->[5:    4.00].

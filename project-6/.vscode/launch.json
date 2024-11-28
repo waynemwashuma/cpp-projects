@@ -1,0 +1,17 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Debug Build",
+    "program": "${cwd}/PJ3-debug.exe",
+    "stopAtEntry": true,
+    "externalConsole": false,
+    "args": ["samples\\network01.txt","DirectedGraph","0"],
+    "type": "cppdbg",
+    "cwd": "${workspaceFolder}",
+    "request": "launch",
+    "MIMode": "gdb"
+  }]
+}
