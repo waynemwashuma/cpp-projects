@@ -10,7 +10,6 @@ enum COLOR
     WHITE,
     GREY
 };
-
 struct Edge
 {
     unsigned int index;
@@ -26,8 +25,11 @@ struct Vertex
     COLOR color;
     double distance;
     Vertex *previous;
+    int key;
 };
 
+typedef Vertex* PVertex;
+typedef Edge* PEdge;
 struct CheckPoint
 {
     unsigned int point_index;
