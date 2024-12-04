@@ -1,6 +1,6 @@
 CXX		=	g++
 CXXFLAGS	= -Wall -std=c++11
-SOURCES = main.cpp graph.cpp util.cpp
+SOURCES = main.cpp graph.cpp util.cpp stack.cpp heap.cpp
 
 all:		main debug
 main:
