@@ -24,7 +24,10 @@ struct Patient {
 const size_t MAX_CAPACITY = 10;
 
 // Function declarations
-void logTransaction(const string& message);
+void logTransaction(const string hospital,const string& message);
+void save_queue();
+void save_log();
+void log_left_patients();
 void clearScreen();
 int mainMenu();
 int departmentMenu(const string& clinicName);

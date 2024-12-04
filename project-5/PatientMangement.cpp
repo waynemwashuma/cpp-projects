@@ -1,21 +1,83 @@
 #include "PatientManagement.h"
 
+map<string, std::string> log_info = {{"HC", ""}, {"PC", ""}, {"PSC", ""}};
 map<string, queue<Patient>> criticalQueues = {{"HC", {}}, {"PC", {}}, {"PSC", {}}};
 map<string, queue<Patient>> regularQueues = {{"HC", {}}, {"PC", {}}, {"PSC", {}}};
 
 Patient::Patient(string fn, string ln, string ssnNum) : firstName(fn), lastName(ln), ssn(ssnNum) {}
 
-void logTransaction(const string &message)
+void logTransaction(const string hospital, const string &message)
+{
+    log_info[hospital] += message + "\n";
+}
+
+void save_log()
 {
     ofstream logFile("transaction.log", ios::app);
-    if (logFile.is_open())
+    if (!logFile.is_open())
+        return;
+    for (auto pair : log_info)
     {
-        logFile << message << endl;
-        logFile.close();
+        const string &hospital = pair.first;
+        const string &info = pair.second;
+        logFile << "Logs for " << hospital << " clinic."<< endl;
+        logFile << info << endl;
     }
-    else
+}
+
+void save_queue()
+{
+    ofstream file("newPatients.csv");
+    if (!file.is_open())
+        return;
+
+    for (auto pair : criticalQueues)
     {
-        cerr << "Error: Unable to open transaction log file." << endl;
+        const string &hospital = pair.first;
+        queue<Patient> queue = pair.second;
+        while (!queue.empty())
+        {
+            Patient &patient = queue.front();
+            queue.pop();
+            file << hospital << "," << patient.firstName << ","
+                 << patient.lastName << "," << patient.ssn << "," << endl;
+        }
+    }
+    for (auto pair : regularQueues)
+    {
+        const string &hospital = pair.first;
+        queue<Patient> queue = pair.second;
+        while (!queue.empty())
+        {
+            Patient &patient = queue.front();
+            queue.pop();
+            file << hospital << "," << patient.firstName << ","
+                 << patient.lastName << "," << patient.ssn << "," << endl;
+        }
+    }
+}
+
+void log_left_patients()
+{
+    for (auto pair : criticalQueues)
+    {
+        queue<Patient> queue = pair.second;
+        while (!queue.empty())
+        {
+            Patient &patient = queue.front();
+            queue.pop();
+            logTransaction(pair.first, "Success: " + patient.firstName + " " + patient.lastName + " rescheduled for the next day.");
+        }
+    }
+    for (auto pair : regularQueues)
+    {
+        queue<Patient> queue = pair.second;
+        while (!queue.empty())
+        {
+            Patient &patient = queue.front();
+            queue.pop();
+            logTransaction(pair.first, "Success: " + patient.firstName + " " + patient.lastName + " rescheduled for the next day.");
+        }
     }
 }
 
@@ -89,25 +151,25 @@ void loadInitialPatients(const string &fileName)
 
         if (criticalQueues.find(clinic) == criticalQueues.end())
         {
-            logTransaction("Error: Invalid clinic name in file for " + firstName + " " + lastName);
+            logTransaction(clinic, "Error: Invalid clinic name in file for " + firstName + " " + lastName);
             continue;
         }
 
         if (!all_of(ssn.begin(), ssn.end(), ::isdigit))
         {
-            logTransaction("Error: Invalid SSN in file for " + firstName + " " + lastName);
+            logTransaction(clinic, "Error: Invalid SSN in file for " + firstName + " " + lastName);
             continue;
         }
 
         size_t totalPatients = criticalQueues[clinic].size() + regularQueues[clinic].size();
         if (totalPatients >= MAX_CAPACITY)
         {
-            logTransaction("Error: Clinic " + clinic + " is full for " + firstName + " " + lastName);
+            logTransaction(clinic, "Error: Clinic " + clinic + " is full for " + firstName + " " + lastName);
             continue;
         }
 
         regularQueues[clinic].push(Patient(firstName, lastName, ssn));
-        logTransaction("Success: Added patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
+        logTransaction(clinic, "Success: Added patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
     }
 
     file.close();
@@ -136,7 +198,7 @@ void addPatient(const string &clinic, bool is_critical)
     if (!all_of(ssn.begin(), ssn.end(), ::isdigit))
     {
         cout << "Error: SSN must be numeric." << endl;
-        logTransaction("Error: Invalid SSN for " + firstName + " " + lastName);
+        logTransaction(clinic, "Error: Invalid SSN for " + firstName + " " + lastName);
         continueToMenu();
         return;
     }
@@ -145,7 +207,7 @@ void addPatient(const string &clinic, bool is_critical)
     if (totalPatients >= MAX_CAPACITY)
     {
         cout << "Error: Clinic is full. Cannot add more patients." << endl;
-        logTransaction("Error: Clinic " + clinic + " is full for " + firstName + " " + lastName);
+        logTransaction(clinic, "Error: Clinic " + clinic + " is full for " + firstName + " " + lastName);
         continueToMenu();
         return;
     }
@@ -154,13 +216,13 @@ void addPatient(const string &clinic, bool is_critical)
     {
         regularQueues[clinic].push(Patient(firstName, lastName, ssn));
         cout << clinic << " Patient (Regular): " << firstName << " " << lastName << " was added to the waiting room." << endl;
-        logTransaction("Success: Added regular patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
+        logTransaction(clinic, "Success: Added regular patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
     }
     else
     {
         criticalQueues[clinic].push(Patient(firstName, lastName, ssn));
         cout << clinic << " Patient (Critical): " << firstName << " " << lastName << " was added to the waiting room." << endl;
-        logTransaction("Success: Added critically ill patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
+        logTransaction(clinic, "Success: Added critically ill patient " + firstName + " " + lastName + " (" + ssn + ") to " + clinic);
     }
     continueToMenu();
 }
@@ -209,7 +271,7 @@ void takeOutPatient(const string &clinic)
         Patient patient = criticalQueues[clinic].front();
         criticalQueues[clinic].pop();
         cout << clinic << " Patient (Critical): " << patient.firstName << " " << patient.lastName << " was taken to the operating room." << endl;
-        logTransaction("Success: Critical patient " + patient.firstName + " " + patient.lastName + " taken to the operating room from " + clinic);
+        logTransaction(clinic, "Success: Critical patient " + patient.firstName + " " + patient.lastName + " taken to the operating room from " + clinic);
         continueToMenu();
         return;
     }
@@ -220,7 +282,7 @@ void takeOutPatient(const string &clinic)
         Patient patient = regularQueues[clinic].front();
         regularQueues[clinic].pop();
         cout << clinic << " Patient: " << patient.firstName << " " << patient.lastName << " was taken to the operating room." << endl;
-        logTransaction("Success: Regular patient " + patient.firstName + " " + patient.lastName + " taken to the operating room from " + clinic);
+        logTransaction(clinic, "Success: Regular patient " + patient.firstName + " " + patient.lastName + " taken to the operating room from " + clinic);
         continueToMenu();
         return;
     }
@@ -249,7 +311,7 @@ void cancelPatient(const string &clinic)
         {
             found = true;
             cout << clinic << " Patient (Critical): " << patient.firstName << " " << patient.lastName << " was removed from the waiting list." << endl;
-            logTransaction("Success: " + clinic + " Patient (Critical): " + patient.firstName + " " + patient.lastName + " (" + ssn + ") was removed from the waiting list.");
+            logTransaction(clinic, "Success: " + clinic + " Patient (Critical): " + patient.firstName + " " + patient.lastName + " (" + ssn + ") was removed from the waiting list.");
         }
         else
         {
@@ -270,7 +332,7 @@ void cancelPatient(const string &clinic)
             {
                 found = true;
                 cout << clinic << " Patient: " << patient.firstName << " " << patient.lastName << " was removed from the waiting list." << endl;
-                logTransaction("Success: " + clinic + " Patient: " + patient.firstName + " " + patient.lastName + " (" + ssn + ") was removed from the waiting list.");
+                logTransaction(clinic, "Success: " + clinic + " Patient: " + patient.firstName + " " + patient.lastName + " (" + ssn + ") was removed from the waiting list.");
             }
             else
             {
@@ -283,7 +345,7 @@ void cancelPatient(const string &clinic)
     if (!found)
     {
         cout << "ERROR " << clinic << ": Unable to find patient with SSN " << ssn << "." << endl;
-        logTransaction("ERROR " + clinic + ": Unable to find patient with SSN " + ssn + ".");
+        logTransaction(clinic, "ERROR " + clinic + ": Unable to find patient with SSN " + ssn + ".");
     }
     continueToMenu();
 }

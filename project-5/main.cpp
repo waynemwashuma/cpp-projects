@@ -44,7 +44,9 @@ int main()
                 break;
         }
     }
-
+    log_left_patients();
+    save_log();
+    save_queue();
     cout << "Exiting system. Goodbye!" << endl;
     return 0;
 }
