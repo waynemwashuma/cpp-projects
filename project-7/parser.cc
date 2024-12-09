@@ -34,7 +34,7 @@ void Parser::infer(std::vector<Token> tokens)
     case COLON:
       parse_types(i, tokens);
       break;
-        case GREATER:
+    case GREATER:
     case GTEQ:
     case LTEQ:
     case PLUS:
@@ -59,6 +59,7 @@ void Parser::validate_types(std::vector<Token> tokens)
     {
     case EQUAL:
       validate_assignment(i, tokens);
+      i = get_semi(i, tokens);
       break;
     case NOTEQUAL:
     case LESS:
@@ -114,7 +115,8 @@ void Parser::validate_assignment(unsigned int index, std::vector<Token> tokens)
 {
   Token &lvalue = tokens[index - 1];
   Token &rvalue = tokens[index + 1];
-
+  if (lvalue.token_type == LPAREN)
+    return;
   std::string l_type = get_type(lvalue), r_type;
   if (is_operator(rvalue))
   {
@@ -183,6 +185,7 @@ std::string Parser::infer_type_op(unsigned int index, std::vector<Token> tokens)
   }
   switch (tokens[index].token_type)
   {
+  case EQUAL:
   case NOT:
   case NOTEQUAL:
   case LESS:
@@ -236,6 +239,7 @@ std::tuple<std::string, int> Parser::infer_operator(unsigned int op, std::vector
   {
   case NOT:
     return std::make_tuple("bool", r_idx - 1);
+  case EQUAL:
   case NOTEQUAL:
   case LESS:
   case GREATER:
@@ -383,6 +387,7 @@ std::tuple<std::string, int> Parser::validate_operator(unsigned int op, std::vec
       exit(1);
     }
     return std::make_tuple("bool", r_idx - 1);
+  case EQUAL:
   case NOTEQUAL:
   case LESS:
   case GREATER:
@@ -500,6 +505,7 @@ bool is_operator(Token &token)
 {
   switch (token.token_type)
   {
+  case EQUAL:
   case NOTEQUAL:
   case LESS:
   case GREATER:
