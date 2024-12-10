@@ -1,0 +1,9 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "files.associations": {
+    "*.ejs": "html",
+    "cmath": "cpp",
+    "array": "cpp",
+    "tuple": "cpp"
+  }
+}
